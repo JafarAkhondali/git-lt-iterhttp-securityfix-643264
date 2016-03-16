@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /**
  * [http 简易HTTP静态服务器脚本]
  * 基本功能：
@@ -10,12 +12,10 @@
  * 7. 允许跨域请求，方便其它项目测试时调用模拟接口的JSON数据
  * 8. host默认为本地IP(方便生成二维码手机扫描预览)
  */
-
 var http = require('http');        // Http服务器API
 var fs = require('fs');            // 用于处理本地文件
 var os = require('os');            //用于获取本地IP地址
 var exec = require('child_process').exec; //用于打开默认浏览器
-var spawn = require('child_process').spawn; //用于打开默认浏览器
 var path = require('path');     //用于处理路径和后缀
 var url = require('url');       //用于解析get请求所带的参数
 var zlib = require('zlib');     //用于文件GZip压缩
@@ -28,16 +28,16 @@ var argv = require("minimist")(process.argv.slice(2), {
   },
   string: ['port', 'home', 'homedir']
 });
-console.log(argv);
+log = function(txt){ console.log(txt); };
 
 if (argv.help) {
-  console.log("Usage:");
-  console.log("  iter-http --help // print help information");
-  console.log("  iter-http // random a port, current folder as root");
-  console.log("  iter-http 8888 // 8888 as port");
-  console.log("  iter-http -p 8989 // 8989 as port");
-  console.log("  iter-http -h index.htm // index.htm as home page");
-  console.log("  iter-http -d dist // dist as root");
+  log("Usage:");
+  log("  iter-http --help // print help information");
+  log("  iter-http // random a port, current folder as root");
+  log("  iter-http 8888 // 8888 as port");
+  log("  iter-http -p 8989 // 8989 as port");
+  log("  iter-http -h index.htm // index.htm as home page");
+  log("  iter-http -d dist // dist as root");
   process.exit(0);
 }
 
@@ -48,13 +48,12 @@ var CONFIG, //默认配置
 CONFIG = {
   homedir:argv.homedir || '',
   home: argv.home || 'index.html',
-  port: argv.port || 0,
+  port: argv['_'][0] || argv.port || 0,
   browser: true,
   fileMatch: /^(gif|png|jpg|js|css)$/ig, //指定需要缓存的文件的类型
   maxAge: 60*60*24*365, //缓存过期时间
   zipMatch: /css|js|html/ig,
 };
-log = function(txt){ console.log(txt); };
 
 HTTP = {
   init:function(){
@@ -82,7 +81,7 @@ HTTP = {
       exec('start ' + pathSrc);
       break;
     default:
-      spawn('xdg-open', [pathSrc]);
+      exec('xdg-open ' + pathSrc);
     }
   },
   _getMIME:function(ext){/* 获取文件的MIME类型 */
