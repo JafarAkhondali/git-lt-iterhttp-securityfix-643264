@@ -1,6 +1,6 @@
 {
   "name": "iter-http",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Run static file server",
   "main": "./http.js",
   "scripts": {

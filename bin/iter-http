@@ -10,6 +10,10 @@
  * 6. 可配置主页
  * 7. 允许跨域请求，方便其它项目测试时调用模拟接口的JSON数据
  * 8. host默认为本地IP(方便生成二维码手机扫描预览)
+ * 9. 支持304指定资源的缓存响应
+ * 10. 支持对特定文件启用Gzip压缩
+ * 11. 支持全局快捷命令调用
+ * 12. 支持断点续传
  */
 var http = require('http');        // Http服务器API
 var fs = require('fs');            // 用于处理本地文件
@@ -268,6 +272,7 @@ HTTP = {
         var oURL = url.parse(request.url);
         var pathName = oURL.pathname.slice(1);
         if(!pathName) pathName = defaultUrl;
+        pathName = pathName ? (CONFIG.homedir+'/'+pathName) : defaultUrl;
         self.route.bind(self)(pathName, request, response);
     });
   }
