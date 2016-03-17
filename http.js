@@ -30,7 +30,12 @@ var argv = require("minimist")(process.argv.slice(2), {
   },
   string: ['port', 'home', 'homedir']
 });
-log = function(txt){ console.log(txt); };
+
+var CONFIG, //默认配置
+    HTTP,   //HTTP静态类
+    log;    //日志打印
+    
+var log = function(txt){ console.log(txt); };
 
 if (argv.help) {
   log("Usage:");
@@ -42,10 +47,6 @@ if (argv.help) {
   log("  iter-http -d dist // dist as root");
   process.exit(0);
 }
-
-var CONFIG, //默认配置
-    HTTP,   //HTTP静态类
-    log;    //日志打印
 
 CONFIG = {
   homedir:argv.homedir || '',
@@ -271,7 +272,7 @@ HTTP = {
         var oURL = url.parse(request.url);
         var pathName = oURL.pathname.slice(1);
         if(!pathName) pathName = defaultUrl;
-        pathName = pathName ? (CONFIG.homedir+'/'+pathName) : defaultUrl;
+        pathName = pathName ? (CONFIG.homedir?(CONFIG.homedir+'/'+pathName):pathName) : defaultUrl;
         self.route.bind(self)(pathName, request, response);
     });
   }
