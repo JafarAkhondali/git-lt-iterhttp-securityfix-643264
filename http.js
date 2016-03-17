@@ -34,7 +34,7 @@ var argv = require("minimist")(process.argv.slice(2), {
 var CONFIG, //默认配置
     HTTP,   //HTTP静态类
     log;    //日志打印
-    
+
 var log = function(txt){ console.log(txt); };
 
 if (argv.help) {
@@ -162,7 +162,7 @@ HTTP = {
 
     // 检测请求头是否携带 If-Modified-Since 信息，如果请求的文件的If-Modified-Since时间与最后修改时间相同，则返回304
     var ifModifiedSince = "if-modified-since";
-    if(req.headers[ifModifiedSince] && lastModified == req.header[ifModifiedSince]){
+    if(req.headers[ifModifiedSince] && lastModified == req.headers[ifModifiedSince]){
       res.setHeader(304, 'Not Modified');
       res.end();
       return;
